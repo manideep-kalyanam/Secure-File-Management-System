@@ -1,10 +1,7 @@
 show databases;
-
-// created a database for FCS Project
 CREATE DATABASE FCS_Project;
 use FCS_Project;
 
-// table User
 CREATE TABLE User (
     id INT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(150) UNIQUE NOT NULL,
@@ -15,11 +12,10 @@ CREATE TABLE User (
     public_key TEXT,
     private_key_encrypted TEXT
 );
+
 desc user;
 select * from user;
 
-
-// table File
 CREATE TABLE File (
     id INT AUTO_INCREMENT PRIMARY KEY,
     filename VARCHAR(255) NOT NULL,
@@ -31,7 +27,6 @@ CREATE TABLE File (
 );
 desc file;
 
-// table SharedFile
 CREATE TABLE SharedFile (
     id INT AUTO_INCREMENT PRIMARY KEY,
     file_id INT NOT NULL,
