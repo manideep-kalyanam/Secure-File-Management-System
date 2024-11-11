@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Dashboard Container */
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+            flex-direction: row;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .sidebar h2 {
+            margin: 0;
+            padding-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .tabs {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+        }
+
+        .tab {
+            padding: 10px 15px;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            border-bottom: 1px solid #495057;
+        }
+
+        .tab:hover {
+            background-color: #495057;
+        }
+
+        .tab.active {
+            background-color: #007BFF;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            flex: 1;
+            background-color: white;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        #file-list, #shared-file-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        #file-list li, #shared-file-list li {
+            padding: 10px;
+            background-color: #f8f9fa;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #file-list li:hover, #shared-file-list li:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Form Styles */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>Welcome, {{ session['username'] }}</h2>
+            <ul class="tabs">
+                <li id="upload-tab" class="tab" onclick="showTab('upload')">Upload a File</li>
+                <li id="your-files-tab" class="tab" onclick="showTab('your-files')">Your Files</li>
+                <li id="shared-files-tab" class="tab" onclick="showTab('shared-files')">Shared Files</li>
+                <li id="your-keys-tab" class="tab" onclick="showTab('your-keys')">Your Keys</li>
+            </ul>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <div id="upload" class="tab-content">
+                <!-- Upload File Form -->
+                <h3>Upload a File</h3>
+                <form id="upload-form" action="{{ url_for('file.upload_file') }}" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="file" required>
+                    <button type="submit">Upload File</button>
+                </form>
+            </div>
+
+            <div id="your-files" class="tab-content">
+                <!-- List of Files -->
+                <h3>Your Files</h3>
+                <ul id="file-list">
+                    <!-- Dynamically populated by backend -->
+                </ul>
+            </div>
+
+            <div id="shared-files" class="tab-content">
+                <!-- List of Shared Files -->
+                <h3>Shared Files</h3>
+                <ul id="shared-file-list">
+                    <!-- Dynamically populated by backend -->
+                </ul>
+            </div>
+
+            <div id="your-keys" class="tab-content">
+                <!-- User Keys -->
+                <h3>Your Keys</h3>
+                <p>Public Key: {{ user_public_key }}</p>
+                <p>Private Key: {{ user_private_key }}</p>
+                <button id="generate-keys">Generate New Keys</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab content
+            var tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.style.display = 'none');
+            
+            // Highlight the active tab
+            var tabLinks = document.querySelectorAll('.tab');
+            tabLinks.forEach(link => link.classList.remove('active'));
+            
+            // Show the selected tab content
+            document.getElementById(tabName).style.display = 'block';
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+
+        // Default Tab
+        showTab('upload');
+    </script>
+</body>
+</html>
